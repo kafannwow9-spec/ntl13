@@ -1086,17 +1086,18 @@ client.on('interactionCreate', async interaction => {
           return;
         }
         const settings = await storage.getProtectionSettings(interaction.guildId!);
-        const guild = interaction.guild;
         
         const noEmoji = '<:no:1460653630435754058>';
         const yesEmoji = '<:Yes:1460653760614367334>';
+        const botsEmoji = '<:bot:1460652542794141941>';
 
         const embed = new EmbedBuilder()
           .setAuthor({ name: interaction.guild!.name, iconURL: interaction.guild!.iconURL() || undefined })
           .setDescription(
             `> **حماية السب** ${settings.words ? yesEmoji : noEmoji}\n` +
             `> **حماية الروابط** ${settings.links ? yesEmoji : noEmoji}\n` +
-            `> **حماية السبام** ${settings.spam ? yesEmoji : noEmoji}`
+            `> **حماية السبام** ${settings.spam ? yesEmoji : noEmoji}\n` +
+            `> **حماية البوتات** ${settings.bots ? yesEmoji : noEmoji}`
           )
           .setThumbnail(interaction.guild!.iconURL())
           .setColor(0x2B2D31);
@@ -1119,6 +1120,11 @@ client.on('interactionCreate', async interaction => {
               label: 'حماية سبام',
               value: 'spam',
               emoji: '<:Spam:1460652542794141941>'
+            },
+            {
+              label: 'حماية البوتات',
+              value: 'bots',
+              emoji: botsEmoji
             },
             {
               label: 'Reset Menu',
@@ -1209,14 +1215,22 @@ client.on('interactionCreate', async interaction => {
       const { customId, values } = interaction;
       
       if (customId === 'protection_select') {
-        const type = values[0] as 'words' | 'links' | 'spam' | 'reset_menu' | 'words_enable' | 'words_disable' | 'words_add';
+        const type = values[0] as 'words' | 'links' | 'spam' | 'bots' | 'reset_menu' | 'words_enable' | 'words_disable' | 'words_add';
         
         if (type === 'reset_menu') {
           await interaction.update({ content: interaction.message.content });
           return;
         }
 
-        if (type === 'words') {
+        if (type === 'bots') {
+          // Check permission: Owner or Developer
+          if (interaction.user.id !== interaction.guild?.ownerId && interaction.user.id !== '1179133837930938470') {
+            await interaction.reply({ content: 'عذراً، فقط صاحب السيرفر أو المطور يمكنهم التحكم في حماية البوتات. ❌', ephemeral: true });
+            return;
+          }
+          const current = await storage.getProtectionSettings(interaction.guildId!);
+          await storage.setProtectionSetting(interaction.guildId!, 'bots', !current.bots);
+        } else if (type === 'words') {
           // New menu for words protection
           const embed = new EmbedBuilder()
             .setTitle('إعدادات حماية السب')
@@ -1350,13 +1364,15 @@ client.on('interactionCreate', async interaction => {
         const blacklistWords = await storage.getBlacklist(interaction.guildId!);
         const noEmoji = '<:no:1460653630435754058>';
         const yesEmoji = '<:Yes:1460653760614367334>';
+        const botsEmoji = '<:bot:1460652542794141941>';
 
         const embed = new EmbedBuilder()
           .setAuthor({ name: interaction.guild!.name, iconURL: interaction.guild!.iconURL() || undefined })
           .setDescription(
             `> **حماية السب** ${newSettings.words ? yesEmoji : noEmoji}\n` +
             `> **حماية الروابط** ${newSettings.links ? yesEmoji : noEmoji}\n` +
-            `> **حماية السبام** ${newSettings.spam ? yesEmoji : noEmoji}`
+            `> **حماية السبام** ${newSettings.spam ? yesEmoji : noEmoji}\n` +
+            `> **حماية البوتات** ${newSettings.bots ? yesEmoji : noEmoji}`
           )
           .setThumbnail(interaction.guild!.iconURL())
           .setColor(0x2B2D31);
@@ -1375,6 +1391,7 @@ client.on('interactionCreate', async interaction => {
             { label: 'حماية سب', value: 'words', emoji: '<:shitword:1460652547428716635>' },
             { label: 'حماية روابط', value: 'links', emoji: '<:links:1460652545142820864>' },
             { label: 'حماية سبام', value: 'spam', emoji: '<:Spam:1460652542794141941>' },
+            { label: 'حماية البوتات', value: 'bots', emoji: botsEmoji },
             { label: 'Reset Menu', description: 'إعادة تعيين القائمة', value: 'reset_menu', emoji: '<:loding:1450903710342447228>' }
           ]);
 
