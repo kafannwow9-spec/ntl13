@@ -1,0 +1,9 @@
+[
+  {
+    "id": 1,
+    "guildId": "1436430524418887754",
+    "shortcut": "tm",
+    "command": "timeout",
+    "restrictions": {}
+  }
+]

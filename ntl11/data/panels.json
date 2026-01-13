@@ -1,0 +1,28 @@
+[
+  {
+    "name": "تجربة",
+    "title": "تجربة",
+    "description": "تجربة",
+    "welcomeMessage": "تجربة",
+    "supportRoles": [
+      "1449445296760422524"
+    ],
+    "categoryId": "1449445540407410860",
+    "imageUrl": null,
+    "ticketWelcomeImageUrl": null,
+    "id": 1
+  },
+  {
+    "name": "تجارب",
+    "title": "تجربة",
+    "description": "تجرلة",
+    "welcomeMessage": "تجرلة",
+    "supportRoles": [
+      "1449445296760422524"
+    ],
+    "categoryId": "1449445540407410860",
+    "imageUrl": null,
+    "ticketWelcomeImageUrl": null,
+    "id": 2
+  }
+]

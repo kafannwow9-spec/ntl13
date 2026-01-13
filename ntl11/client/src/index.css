@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-body: 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+
+  /* Discord-inspired Dark Palette */
+  --background: 223 7% 20%;     /* #313338 - Main chat bg */
+  --foreground: 210 10% 96%;    /* #F2F3F5 - Text */
+  
+  --card: 220 7% 18%;           /* #2B2D31 - Channel list bg */
+  --card-foreground: 210 10% 96%;
+  
+  --popover: 225 6% 13%;        /* #1E1F22 - Server list bg */
+  --popover-foreground: 210 10% 96%;
+  
+  --primary: 235 86% 65%;       /* #5865F2 - Blurple */
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 223 7% 20%;
+  --secondary-foreground: 214 8% 80%;
+  
+  --muted: 217 8% 15%;
+  --muted-foreground: 214 8% 65%;
+  
+  --accent: 235 86% 65%;
+  --accent-foreground: 0 0% 100%;
+  
+  --destructive: 359 87% 60%;   /* #DA373C */
+  --destructive-foreground: 0 0% 100%;
+
+  --success: 145 65% 39%;       /* #23A559 */
+  
+  --border: 225 6% 13%;
+  --input: 225 6% 13%;
+  --ring: 235 86% 65%;
+  
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-body);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}
+
+/* Custom Scrollbar for that Discord feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(223 7% 20%); 
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(225 6% 13%); 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(220 7% 10%); 
+}
