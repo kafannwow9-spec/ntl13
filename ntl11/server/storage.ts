@@ -47,8 +47,8 @@ export interface IStorage {
   setShortcut(guildId: string, shortcut: string, command: string, restrictions: { roles?: string[], channels?: string[] }): Promise<void>;
   getShortcuts(guildId: string): Promise<any[]>;
   // Protection Settings
-  setProtectionSetting(guildId: string, type: 'words' | 'links' | 'spam', value: boolean): Promise<void>;
-  getProtectionSettings(guildId: string): Promise<{ words: boolean; links: boolean; spam: boolean }>;
+  setProtectionSetting(guildId: string, type: 'words' | 'links' | 'spam' | 'bots', value: boolean): Promise<void>;
+  getProtectionSettings(guildId: string): Promise<{ words: boolean; links: boolean; spam: boolean; bots: boolean }>;
   
   // Bot Blacklist
   addToBotBlacklist(userId: string, reason: string): Promise<void>;
@@ -265,19 +265,24 @@ export class FileStorage implements IStorage {
     return this.shortcuts.filter(s => s.guildId === guildId);
   }
 
-  async setProtectionSetting(guildId: string, type: 'words' | 'links' | 'spam', value: boolean): Promise<void> {
+  async setProtectionSetting(guildId: string, type: 'words' | 'links' | 'spam' | 'bots', value: boolean): Promise<void> {
     let settings = this.protectionSettings.find(s => s.guildId === guildId);
     if (!settings) {
-      settings = { id: this.nextIds.protectionSettings++, guildId, words: false, links: false, spam: false };
+      settings = { id: this.nextIds.protectionSettings++, guildId, words: false, links: false, spam: false, bots: false };
       this.protectionSettings.push(settings);
     }
     settings[type] = value;
     this.saveData("protectionSettings");
   }
 
-  async getProtectionSettings(guildId: string): Promise<{ words: boolean; links: boolean; spam: boolean }> {
+  async getProtectionSettings(guildId: string): Promise<{ words: boolean; links: boolean; spam: boolean; bots: boolean }> {
     const settings = this.protectionSettings.find(s => s.guildId === guildId);
-    return settings ? { words: settings.words, links: settings.links, spam: settings.spam } : { words: false, links: false, spam: false };
+    return settings ? { 
+      words: settings.words || false, 
+      links: settings.links || false, 
+      spam: settings.spam || false,
+      bots: settings.bots || false
+    } : { words: false, links: false, spam: false, bots: false };
   }
 
   async addToBotBlacklist(userId: string, reason: string): Promise<void> {

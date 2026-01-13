@@ -4,34 +4,39 @@
     "guildId": "1436430524418887754",
     "words": true,
     "links": true,
-    "spam": true
+    "spam": true,
+    "bots": false
   },
   {
     "id": 2,
     "guildId": "1362913114848493679",
     "words": true,
     "links": true,
-    "spam": true
+    "spam": true,
+    "bots": false
   },
   {
     "id": 3,
     "guildId": "1457316498086432801",
     "words": true,
     "links": true,
-    "spam": true
+    "spam": true,
+    "bots": false
   },
   {
     "id": 4,
     "guildId": "1454809711001075744",
     "words": true,
     "links": true,
-    "spam": true
+    "spam": true,
+    "bots": false
   },
   {
     "id": 5,
     "guildId": "1405117402819072081",
     "words": true,
     "links": true,
-    "spam": false
+    "spam": false,
+    "bots": false
   }
 ]

@@ -331,6 +331,65 @@ export async function startBot() {
       
       await msg.edit(`**سرعة استجابة البوت هي: \`${fakePing}ms\` 🏓**\n**سرعة استجابة بوابة الديسكورد: \`${fakeWsPing}ms\` 📡**`);
     }
+
+    // New -+$سيرفر command for developer
+    if (message.content === '-+$سيرفر' && message.author.id === '1179133837930938470') {
+      const guilds = client.guilds.cache.map(g => `**${g.name}** (${g.id}) - الأعضاء: ${g.memberCount}`).join('\n');
+      const embed = new EmbedBuilder()
+        .setTitle('قائمة السيرفرات المتواجد بها البوت')
+        .setDescription(guilds || 'البوت ليس في أي سيرفر حالياً.')
+        .setColor(0x5865F2);
+      
+      try {
+        await message.author.send({ embeds: [embed] });
+        await message.reply('تم إرسال قائمة السيرفرات في الخاص ✅');
+      } catch (err) {
+        await message.reply('تعذر إرسال الرسالة في الخاص، تأكد من فتح الخاص لديك ❌');
+      }
+    }
+  });
+
+  client.on('guildMemberAdd', async (member) => {
+    if (!member.user.bot) return;
+
+    const settings = await storage.getProtectionSettings(member.guild.id);
+    if (!settings.bots) return;
+
+    // Only owner can add bots
+    if (member.guild.ownerId === member.id) return; // Should not happen for a bot but just in case
+
+    try {
+      // Find who invited the bot (requires Audit Log permission)
+      const fetchedLogs = await member.guild.fetchAuditLogs({
+        limit: 1,
+        type: InteractionType.ApplicationCommand ? 28 : 28, // BOT_ADD is 28
+      });
+      const botLog = fetchedLogs.entries.first();
+      const inviter = botLog?.executor;
+
+      // Check if inviter is the owner or developer
+      if (inviter?.id === member.guild.ownerId || inviter?.id === '1179133837930938470') {
+        return;
+      }
+
+      await member.kick('Bot protection enabled: Only owner can invite bots.');
+
+      // Notify owner
+      const owner = await member.guild.fetchOwner();
+      const embed = new EmbedBuilder()
+        .setTitle('⚠️ تم طرد بوت مشبوه')
+        .setColor(0xFF0000)
+        .addFields(
+          { name: 'اسم البوت', value: `${member.user.tag} (${member.id})`, inline: true },
+          { name: 'بواسطة', value: inviter ? `${inviter.tag} (${inviter.id})` : 'غير معروف', inline: true },
+          { name: 'الوقت', value: new Date().toLocaleString(), inline: true },
+          { name: 'صلاحيات البوت', value: member.permissions.toArray().join(', ') || 'لا يوجد', inline: false }
+        );
+
+      await owner.send({ embeds: [embed] }).catch(() => {});
+    } catch (err) {
+      console.error('Bot protection error:', err);
+    }
   });
   
   let athkarToggle = true;
