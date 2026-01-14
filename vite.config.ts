@@ -35,8 +35,9 @@ export default defineConfig(async () => {
       },
     },
     root: path.resolve(import.meta.dirname, "client"),
+    publicDir: "public",
     build: {
-      outDir: path.resolve(import.meta.dirname, "dist/public"),
+      outDir: path.resolve(import.meta.dirname, "dist", "public"),
       emptyOutDir: true,
     },
     server: {
@@ -45,9 +46,8 @@ export default defineConfig(async () => {
       host: "0.0.0.0",
       allowedHosts: true,
       fs: {
-        strict: true,
-        deny: ["**/.*"],
-      },
+        strict: false,
+      }
     },
   };
 });
