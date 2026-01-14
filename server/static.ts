@@ -6,9 +6,9 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export function setupStatic(app: Express) {
+// قم بتغيير اسم الدالة من setupStatic إلى serveStatic
+export function serveStatic(app: Express) {
   // تحديد مسار الملفات بعد عملية البناء (Build)
-  // نستخدم ".." للرجوع خطوة للخلف لأننا داخل مجلد server والملفات في dist
   const distPath = path.resolve(__dirname, "..", "dist", "public");
 
   if (process.env.NODE_ENV === "production") {
