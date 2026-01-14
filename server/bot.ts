@@ -132,7 +132,8 @@ const commands = [
 
   new SlashCommandBuilder()
     .setName('protection')
-    .setDescription('إعدادات حماية السيرفر'),
+    .setDescription('إعدادات حماية السيرفر')
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
   new SlashCommandBuilder()
     .setName('send_panel')
@@ -1081,10 +1082,6 @@ client.on('interactionCreate', async interaction => {
       }
 
       else if (commandName === 'protection') {
-        if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
-          await interaction.reply({ content: 'عذراً، هذا الأمر مخصص للإداريين فقط. ❌', ephemeral: true });
-          return;
-        }
         const settings = await storage.getProtectionSettings(interaction.guildId!);
         
         const noEmoji = '<:no:1460653630435754058>';
@@ -1135,7 +1132,7 @@ client.on('interactionCreate', async interaction => {
           ]);
 
         const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu);
-        await interaction.reply({ embeds: [embed], components: [row] });
+        await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
       }
 
       else if (commandName === 'blackword') {
