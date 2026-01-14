@@ -27,3 +27,10 @@ outputType = "webview"
 [nix]
 channel = "stable-25_05"
 packages = ["libuuid", "pango", "cairo", "libjpeg_turbo", "giflib", "librsvg", "pixman", "pkg-config"]
+
+[agent]
+expertMode = true
+
+[[ports]]
+localPort = 5000
+externalPort = 80
